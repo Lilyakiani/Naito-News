@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { SidebarLeft } from '@/components/sidebar-left';
-import { SidebarRight } from '@/components/sidebar-right';
+import { SidebarLeft } from '@/components/ui/sidebar-left';
+import { SidebarRight } from '@/components/ui/sidebar-right';
 import {
   Breadcrumb,
   BreadcrumbItem,

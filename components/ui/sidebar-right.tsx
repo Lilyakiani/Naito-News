@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Plus } from 'lucide-react';
 
-import { Calendars } from '@/components/calendars';
-import { DatePicker } from '@/components/date-picker';
-import { NavUser } from '@/components/nav-user';
+import { Calendars } from './calandars';
+import { DatePicker } from '@/components/ui/date-picker';
+import { NavUser } from '@/components/ui/nav-user';
 import {
   Sidebar,
   SidebarContent,
