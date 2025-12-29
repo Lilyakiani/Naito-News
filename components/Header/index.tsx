@@ -1,4 +1,4 @@
-'use client'; // این خط بسیار مهم است
+'use client';
 
 import Galaxy from '../Backgrounds/Galaxy';
 import { Hero } from '../home/Hero';
@@ -30,27 +30,27 @@ export const Header = () => {
     <div
       style={{
         width: '100%',
-        height: '75vh',
+        height: '80vh',
         position: 'relative',
         overflow: 'hidden',
         backgroundColor: '#000',
       }}
     >
-      {/* لایه پس‌زمینه: گلکسی */}
+      {/* background*/}
       <div className="absolute inset-0 z-0">
         <Galaxy density={0.8} transparent={false} />
       </div>
 
-      {/* لایه محتوا: Hero */}
+      {/* content Hero */}
       <div className="relative z-20 flex flex-col items-center justify-center h-full pointer-events-none">
-        {/* pointer-events-none باعث می‌شود ماوس از روی این لایه عبور کند و به گلکسی برسد */}
+        {/* pointer-events-none*/}
         <div className="pointer-events-auto">
-          {/* pointer-events-auto باعث می‌شود دکمه‌های داخل Hero کار کنند */}
+          {/* pointer-events-auto */}
           <Hero />
         </div>
       </div>
 
-      {/* لایه لوگوها */}
+      {/* logos*/}
       <div
         style={{
           position: 'absolute',
