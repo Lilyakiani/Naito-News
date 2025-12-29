@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -18,7 +19,14 @@ type NewsCardProps = {
 
 export function NewsCard({ item }: NewsCardProps) {
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="relative overflow-hidden transition-shadow hover:shadow-md">
+      {/* لینک نامرئی روی کل کارت */}
+      <Link
+        href={`/news/${item.id}`}
+        className="absolute inset-0 z-10"
+        aria-label={`Open news: ${item.title}`}
+      />
+
       {/* Image */}
       <div className="h-40 w-full bg-gray-200">
         {item.imageUrl && (
@@ -33,7 +41,6 @@ export function NewsCard({ item }: NewsCardProps) {
 
       <CardHeader className="space-y-2">
         <Badge className="w-fit capitalize">{item.category}</Badge>
-
         <h3 className="text-base font-semibold line-clamp-2">{item.title}</h3>
       </CardHeader>
 
