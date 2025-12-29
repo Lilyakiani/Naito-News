@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { SidebarLeft } from '@/components/sidebar-left';
-import { SidebarRight } from '@/components/sidebar-right';
+import { SidebarLeft } from '@/components/ui/sidebar-left';
+import { SidebarRight } from '@/components/ui/sidebar-right';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -60,7 +60,7 @@ export default function DashboardPage() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="bg-muted/50 mx-auto h-24 w-full max-w-3xl rounded-xl" />
-          <div className="bg-muted/50 mx-auto h-[100vh] w-full max-w-3xl rounded-xl" />
+          <div className="bg-muted/50 mx-auto h-screen w-full max-w-3xl rounded-xl" />
         </div>
       </SidebarInset>
       <SidebarRight />

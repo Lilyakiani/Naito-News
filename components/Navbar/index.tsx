@@ -121,41 +121,47 @@ const Navbar = ({
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    router.push('/login', { scroll: false });
+    router.push('/login');
   };
 
   return (
     <section>
-      <header className="sticky top-0 z-50 border-b border-dashed border-neutral-800 backdrop-blur-sm">
-        <div className="container mx-auto border-x border-dashed border-neutral-800 px-3 py-3">
-          {/* ================= Desktop ================= */}
-          <nav className="hidden items-center justify-between lg:flex">
-            <div className="flex items-center gap-6">
-              <Link href="/" className="flex items-center gap-2">
-                <ChessKnight className="h-7 w-7" />
-                <span className="font-bold">Naito</span>
+      <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-dashed border-neutral-800/50 bg-background/60 backdrop-blur-md">
+        <div className="container mx-auto border-x border-dashed border-neutral-800/50 px-4">
+          {/* Desktop Navigation */}
+          <nav className="hidden h-16 items-center justify-between lg:flex">
+            <div className="flex items-center gap-8">
+              {/* Logo Section */}
+              <Link href="/" className="flex items-center gap-2 group">
+                <ChessKnight className="h-8 w-8 text-primary transition-transform group-hover:scale-110" />
+                <span className="text-2xl font-black tracking-tighter hover:text-primary transition-colors">
+                  NAITO
+                </span>
               </Link>
 
+              {/* Menu Items  */}
               <div className="flex items-center">
                 <NavigationMenu>
-                  <NavigationMenuList>
+                  <NavigationMenuList className="flex items-center gap-1">
                     {menu.map((item) => renderMenuItem(item))}
                   </NavigationMenuList>
                 </NavigationMenu>
               </div>
             </div>
 
-            <div className="flex gap-2">
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
               <ModeToggle />
               {!user ? (
-                <Button asChild size="sm">
+                <Button asChild size="sm" className="h-9 font-semibold">
                   <Link href="/login">Login</Link>
                 </Button>
               ) : (
-                <>
+                <div className="flex items-center gap-2">
                   <Button
                     size="sm"
                     variant="outline"
+                    className="h-9"
                     onClick={() => router.push('/dashboard')}
                   >
                     Dashboard
@@ -163,67 +169,65 @@ const Navbar = ({
                   <Button
                     size="sm"
                     variant="destructive"
+                    className="h-9"
                     onClick={handleLogout}
                   >
                     Logout
                   </Button>
-                </>
+                </div>
               )}
             </div>
           </nav>
-
           {/* ================= Mobile ================= */}
-          <div className="block lg:hidden">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 font-bold">
-                <ChessKnight />
-                <span>Naito</span>
-              </div>
+          <div className="flex h-16 items-center justify-between lg:hidden">
+            <Link href="/" className="flex items-center gap-2 group">
+              <ChessKnight className="h-7 w-7 text-primary" />
+              <span className="text-xl font-black tracking-tighter">NAITO</span>
+            </Link>
 
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Menu className="size-4" />
-                  </Button>
-                </SheetTrigger>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="size-4" />
+                </Button>
+              </SheetTrigger>
 
-                <SheetContent className="overflow-y-auto">
-                  <SheetHeader>
-                    <SheetTitle>
-                      <ChessKnight />
-                    </SheetTitle>
-                  </SheetHeader>
+              <SheetContent className="overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>
+                    <ChessKnight />
+                  </SheetTitle>
+                </SheetHeader>
 
-                  <div className="flex flex-col gap-6 p-4">
-                    <Accordion type="single" collapsible>
-                      {menu.map((item) => renderMobileMenuItem(item))}
-                    </Accordion>
+                <div className="flex flex-col gap-6 p-4">
+                  <Accordion type="single" collapsible>
+                    {menu.map((item) => renderMobileMenuItem(item))}
+                  </Accordion>
 
-                    <ModeToggle />
+                  <ModeToggle />
 
-                    <div className="flex flex-col gap-3">
-                      {!user ? (
-                        <Button asChild>
-                          <Link href="/login">Login</Link>
+                  <div className="flex flex-col gap-3">
+                    {!user ? (
+                      <Button asChild>
+                        <Link href="/login">Login</Link>
+                      </Button>
+                    ) : (
+                      <>
+                        <Button
+                          variant="outline"
+                          onClick={() => router.push('/dashboard')}
+                        >
+                          Dashboard
                         </Button>
-                      ) : (
-                        <>
-                          <Button
-                            variant="outline"
-                            onClick={() => router.push('/dashboard')}
-                          >
-                            Dashboard
-                          </Button>
-                          <Button variant="destructive" onClick={handleLogout}>
-                            Logout
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                        <Button variant="destructive" onClick={handleLogout}>
+                          Logout
+                        </Button>
+                      </>
+                    )}
                   </div>
-                </SheetContent>
-              </Sheet>
-            </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
@@ -237,9 +241,12 @@ const renderMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
       <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+        <NavigationMenuTrigger className="bg-transparent hover:bg-accent/50 data-[state=open]:bg-accent/50">
+          {item.title}
+        </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150 bg-popover text-popover-foreground rounded-md shadow-md">
+          {/* بخش اصلاح شده: اضافه کردن بلور و شفافیت به پس‌زمینه منوی بازشونده */}
+          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] border border-neutral-800/50 bg-background/60 backdrop-blur-xl rounded-md shadow-2xl">
             {item.items.map((sub) => (
               <NavigationMenuLink asChild key={sub.title}>
                 <li>
@@ -256,7 +263,7 @@ const renderMenuItem = (item: MenuItem) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className="inline-flex h-10 items-center rounded-md px-4 py-2 text-sm font-medium"
+        className="inline-flex h-10 items-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent/50"
       >
         {item.title}
       </NavigationMenuLink>
@@ -288,16 +295,18 @@ const renderMobileMenuItem = (item: MenuItem) => {
 const SubMenuLink = ({ item }: { item: MenuItem }) => (
   <a
     href={item.url}
-    className="flex gap-4 rounded-md p-3 transition-colors hover:bg-muted"
+    // تغییر: حذف hover:bg-muted و استفاده از یک استایل ظریف‌تر
+    className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-white/5 group"
   >
-    {item.icon}
-    <div>
-      <div className="text-sm font-semibold">{item.title}</div>
-      {item.description && (
-        <p className="text-sm text-muted-foreground">{item.description}</p>
-      )}
+    <div className="flex items-center gap-2">
+      {item.icon && <div className="text-primary">{item.icon}</div>}
+      <div className="text-sm font-bold leading-none">{item.title}</div>
     </div>
+    {item.description && (
+      <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+        {item.description}
+      </p>
+    )}
   </a>
 );
-
 export { Navbar };
