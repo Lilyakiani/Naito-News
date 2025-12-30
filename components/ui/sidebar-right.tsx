@@ -16,21 +16,17 @@ import {
   SidebarSeparator,
 } from './sidebar';
 import { useUser } from '@/hooks/use-user';
+import { categories } from '@/lib/categories';
 
-// This is sample data.
 const data = {
-  calendars: [
+  newsdata: [
     {
-      name: 'My Calendars',
+      name: 'My categories',
       items: ['Personal', 'Work', 'Family'],
     },
     {
-      name: 'Favorites',
-      items: ['Holidays', 'Birthdays'],
-    },
-    {
-      name: 'Other',
-      items: ['Travel', 'Reminders', 'Deadlines'],
+      name: 'status',
+      items: ['Published', 'Drafted', 'Archived'],
     },
   ],
 };
@@ -46,22 +42,10 @@ export function SidebarRight({
       className="sticky top-0 hidden h-svh border-l lg:flex"
       {...props}
     >
-      <SidebarHeader className="border-sidebar-border h-16 border-b"></SidebarHeader>
       <SidebarContent>
-        <DatePicker />
         <SidebarSeparator className="mx-0" />
-        <Calendars calendars={data.calendars} />
+        <Calendars calendars={data.newsdata} />
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus />
-              <span>New Calendar</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
     </Sidebar>
   );
 }

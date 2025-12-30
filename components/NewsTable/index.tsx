@@ -96,6 +96,7 @@ export const columns: ColumnDef<NewsItem>[] = [
   },
   {
     id: 'actions',
+    header: 'Actions',
     enableHiding: false,
     cell: ({ row }) => {
       const news = row.original;
@@ -108,14 +109,18 @@ export const columns: ColumnDef<NewsItem>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(news.id)}
             >
-              Copy News ID
+              Edit
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Details</DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-red-400 hover:bg-red-100 hover:text-red-500"
+              onClick={() => navigator.clipboard.writeText(news.id)}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -14,6 +14,7 @@ import {
 import { AppSidebar } from '@/components/ui/app-sidebar';
 import { DynamicBreadcrump } from '@/components/Breadcrump';
 import { News } from '../news/page';
+import { CreateNews } from '../create/page';
 export default function DashboardPage() {
   const supabase = getSupabaseBrowserClient();
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function DashboardPage() {
       case 'News':
         return <News />;
       case 'Create News':
-        return <div>صفحه ساخت خبر (بزودی)</div>;
+        return <CreateNews />;
       default:
         return (
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
@@ -67,7 +68,7 @@ export default function DashboardPage() {
 
         {renderContent()}
       </SidebarInset>
-      <SidebarRight />
+      {activeTab === 'Create News' && <SidebarRight />}
     </SidebarProvider>
   );
 }
