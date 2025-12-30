@@ -20,7 +20,7 @@ export const Hero = () => {
           Level up your{' '}
           <span className="text-indigo-500">knowledge skills</span>
         </h1>
-        <p className="max-w-[600px] mx-auto text-lg md:text-xl text-muted-foreground">
+        <p className="max-w-150 mx-auto text-lg md:text-xl text-muted-foreground">
           Join 12,000+ readers getting weekly tips on building better products.
           No spam, unsubscribe anytime.
         </p>

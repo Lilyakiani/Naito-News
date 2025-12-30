@@ -8,6 +8,7 @@ import {
   Siren,
   Drama,
   Handshake,
+  LayoutGrid,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
@@ -39,6 +40,7 @@ import {
 
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 import { ModeToggle } from '../theme/themetoggle';
+import { categories } from '@/lib/categories';
 
 /* ---------------- types ---------------- */
 
@@ -51,7 +53,14 @@ interface MenuItem {
 }
 
 /* ---------------- component ---------------- */
-
+const iconMap: Record<string, React.ReactNode> = {
+  all: <LayoutGrid className="size-5 shrink-0" />,
+  business: <Handshake className="size-5 shrink-0" />,
+  politics: <Siren className="size-5 shrink-0" />,
+  sports: <Trophy className="size-5 shrink-0" />,
+  technology: <Cpu className="size-5 shrink-0" />,
+  entertainment: <Drama className="size-5 shrink-0" />,
+};
 const Navbar = ({
   menu = [
     { title: 'Home', url: '/' },
@@ -245,8 +254,7 @@ const renderMenuItem = (item: MenuItem) => {
           {item.title}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          {/* بخش اصلاح شده: اضافه کردن بلور و شفافیت به پس‌زمینه منوی بازشونده */}
-          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] border border-neutral-800/50 bg-background/60 backdrop-blur-xl rounded-md shadow-2xl">
+          <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150 border border-neutral-800/50 bg-background/60 backdrop-blur-xl rounded-md shadow-2xl">
             {item.items.map((sub) => (
               <NavigationMenuLink asChild key={sub.title}>
                 <li>

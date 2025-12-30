@@ -1,5 +1,6 @@
 import { CalendarDaysIcon, HandRaisedIcon } from '@heroicons/react/24/outline';
 import Particles from '../Backgrounds/Particles';
+import { Footer } from '../Footer';
 
 export default function NewsLetter() {
   return (
@@ -103,6 +104,7 @@ export default function NewsLetter() {
           className="aspect-[1155/678] w-[72rem] bg-gradient-to-tr from-[#000000] to-[#808080]"
         />
       </div>
+      <Footer />
     </div>
   );
 }

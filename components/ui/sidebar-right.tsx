@@ -15,14 +15,10 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from './sidebar';
+import { useUser } from '@/hooks/use-user';
 
 // This is sample data.
 const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
   calendars: [
     {
       name: 'My Calendars',
@@ -42,15 +38,15 @@ const data = {
 export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const user = useUser();
+
   return (
     <Sidebar
       collapsible="none"
       className="sticky top-0 hidden h-svh border-l lg:flex"
       {...props}
     >
-      <SidebarHeader className="border-sidebar-border h-16 border-b">
-        <NavUser user={data.user} />
-      </SidebarHeader>
+      <SidebarHeader className="border-sidebar-border h-16 border-b"></SidebarHeader>
       <SidebarContent>
         <DatePicker />
         <SidebarSeparator className="mx-0" />
