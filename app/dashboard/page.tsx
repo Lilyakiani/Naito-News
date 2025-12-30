@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { SidebarRight } from '@/components/ui/sidebar-right';
 import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
@@ -65,10 +64,8 @@ export default function DashboardPage() {
             <DynamicBreadcrump />
           </div>
         </header>
-
         {renderContent()}
       </SidebarInset>
-      {activeTab === 'Create News' && <SidebarRight />}
     </SidebarProvider>
   );
 }

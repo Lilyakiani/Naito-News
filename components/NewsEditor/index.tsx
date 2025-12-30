@@ -31,7 +31,7 @@ export const NewsEditor = () => {
         },
       }),
     ],
-    content: '<p>متن خبر...</p>',
+    content: '<p>Write Here... </p>',
     immediatelyRender: false,
     editorProps: {
       attributes: {
