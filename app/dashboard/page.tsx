@@ -14,12 +14,15 @@ import { AppSidebar } from '@/components/ui/app-sidebar';
 import { DynamicBreadcrump } from '@/components/Breadcrump';
 import { News } from '../news/page';
 import { CreateNews } from '../create/page';
+
 export default function DashboardPage() {
   const supabase = getSupabaseBrowserClient();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   const [activeTab, setActiveTab] = useState('overview');
+
+  const [editingNewsId, setEditingNewsId] = useState<string | null>(null);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -31,14 +34,24 @@ export default function DashboardPage() {
     });
   }, []);
 
+  const handleEditNews = (id: string) => {
+    setEditingNewsId(id);
+    setActiveTab('Create News');
+  };
+
+  const handleAddNew = () => {
+    setEditingNewsId(null);
+    setActiveTab('Create News');
+  };
+
   if (!user) return null;
 
   const renderContent = () => {
     switch (activeTab) {
       case 'News':
-        return <News />;
+        return <News onEdit={handleEditNews} />;
       case 'Create News':
-        return <CreateNews />;
+        return <CreateNews newsId={editingNewsId} />;
       default:
         return (
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
@@ -55,7 +68,13 @@ export default function DashboardPage() {
 
   return (
     <SidebarProvider>
-      <AppSidebar onTabChange={setActiveTab} activeTab={activeTab} />
+      <AppSidebar
+        onTabChange={(tab) => {
+          if (tab === 'Create News') setEditingNewsId(null);
+          setActiveTab(tab);
+        }}
+        activeTab={activeTab}
+      />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2">
           <div className="flex items-center gap-2 px-4">

@@ -15,8 +15,12 @@ import {
   Undo,
   Redo,
 } from 'lucide-react';
+interface NewsEditorProps {
+  value: string;
+  onChange: (content: string) => void;
+}
 
-export const NewsEditor = () => {
+export const NewsEditor = ({ value, onChange }: NewsEditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -31,13 +35,16 @@ export const NewsEditor = () => {
         },
       }),
     ],
-    content: '<p>Write Here... </p>',
+    content: value,
     immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
           'prose prose-sm focus:outline-none min-h-[300px] resize-y overflow-auto p-2 [&_ol]:list-decimal [&_ul]:list-disc [&_ol]:ml-4 [&_ul]:ml-4',
       },
+    },
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
     },
   });
 

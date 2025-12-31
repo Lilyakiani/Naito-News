@@ -1,10 +1,7 @@
-export type NewsListResponse<T> = {
-  items: T[];
-  page: number;
-  pageSize: number;
-  total: number;
-  totalPages: number;
-};
+'use server';
+
+import { NEWS_DATA } from './news-data';
+import { createSupabaseServerClient } from './supabase/server-client';
 
 export async function fetchNews(params: {
   q?: string;
@@ -12,15 +9,56 @@ export async function fetchNews(params: {
   page?: number;
   pageSize?: number;
 }) {
-  const sp = new URLSearchParams();
+  const supabase = await createSupabaseServerClient();
 
-  if (params.q) sp.set("q", params.q);
-  if (params.category) sp.set("category", params.category);
-  if (params.page) sp.set("page", String(params.page));
-  if (params.pageSize) sp.set("pageSize", String(params.pageSize));
+  let query = supabase.from('news').select('*', { count: 'exact' });
 
-  const res = await fetch(`/api/news?${sp.toString()}`);
-  if (!res.ok) throw new Error("Failed to fetch news");
+  if (params.category && params.category !== 'all') {
+    query = query.eq('category', params.category);
+  }
+  if (params.q) {
+    query = query.ilike('title', `%${params.q}%`);
+  }
 
-  return res.json();
+  const { data: dbNews } = await query;
+  console.log('DB News Count:', dbNews?.length);
+  const formattedDbNews = (dbNews || []).map((item) => ({
+    id: String(item.id),
+    title: item.title,
+    excerpt: item.excerpt,
+    category: item.category,
+    publishedAt: item.created_at || new Date().toISOString(),
+    imageUrl: item.image_url,
+  }));
+
+  let allNews = [...formattedDbNews, ...NEWS_DATA];
+
+  if (params.category && params.category !== 'all') {
+    allNews = allNews.filter(
+      (n) => n.category.toLowerCase() === params.category?.toLowerCase()
+    );
+  }
+  if (params.q) {
+    allNews = allNews.filter((n) =>
+      n.title.toLowerCase().includes(params.q!.toLowerCase())
+    );
+  }
+  allNews.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+
+  const page = params.page || 1;
+  const pageSize = params.pageSize || 6;
+  const total = allNews.length;
+  const totalPages = Math.ceil(total / pageSize);
+  const items = allNews.slice((page - 1) * pageSize, page * pageSize);
+
+  return {
+    items,
+    total,
+    page,
+    pageSize,
+    totalPages,
+  };
 }

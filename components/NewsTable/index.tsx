@@ -40,95 +40,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchNews } from '@/lib/api';
-import { NewsItem } from '@/lib/news-data';
+import { NEWS_DATA, NewsItem } from '@/lib/news-data';
 
-export const columns: ColumnDef<NewsItem>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'title',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Title <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => (
-      <div className="font-medium">{row.getValue('title')}</div>
-    ),
-  },
-  {
-    accessorKey: 'category',
-    header: 'Category',
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue('category')}</div>
-    ),
-  },
-  {
-    accessorKey: 'publishedAt',
-    header: 'Date',
-    cell: ({ row }) => {
-      const date = new Date(row.getValue('publishedAt'));
-      return <div>{date.toLocaleDateString('en')}</div>;
-    },
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const news = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(news.id)}
-            >
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              className="text-red-400 hover:bg-red-100 hover:text-red-500"
-              onClick={() => navigator.clipboard.writeText(news.id)}
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import { useRouter } from 'next/navigation';
+import { deleteNewsAction } from '@/lib/supabase/actions';
+import { toast } from 'sonner';
 
-export function NewsTable() {
+export function NewsTable({ onEdit }: { onEdit: (id: string) => void }) {
   const [data, setData] = React.useState<NewsItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -139,6 +57,89 @@ export function NewsTable() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const router = useRouter();
+
+  const handleDelete = async (id: string) => {
+    if (confirm('آیا از حذف این خبر اطمینان دارید؟')) {
+      const result = await deleteNewsAction(id);
+      if (result.success) {
+        setData((prev) => prev.filter((item) => item.id !== id));
+        toast.success('خبر با موفقیت حذف شد');
+      } else {
+        toast.error('خطا: ' + result.message);
+      }
+    }
+  };
+
+  const columns: ColumnDef<NewsItem>[] = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected()}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+    },
+    {
+      accessorKey: 'title',
+      header: 'Title',
+      cell: ({ row }) => (
+        <div className="font-medium">{row.getValue('title')}</div>
+      ),
+    },
+    {
+      accessorKey: 'category',
+      header: 'Category',
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue('category')}</div>
+      ),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        const news = row.original;
+        const isStatic = NEWS_DATA.some((item) => item.id === news.id);
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => onEdit(news.id)}
+                disabled={isStatic}
+              >
+                Edit News
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-red-600"
+                onClick={() => handleDelete(news.id)}
+                disabled={isStatic}
+              >
+                Delete News
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
   React.useEffect(() => {
     async function loadData() {
       try {
@@ -146,7 +147,7 @@ export function NewsTable() {
         const response = await fetchNews({ pageSize: 50 });
         setData(response.items);
       } catch (error) {
-        console.error('Error fetching news:', error);
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -227,43 +228,15 @@ export function NewsTable() {
             ))}
           </TableHeader>
           <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  <div className="flex justify-center items-center gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin" /> Loading news...
-                  </div>
-                </TableCell>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results found.
-                </TableCell>
-              </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       </div>
