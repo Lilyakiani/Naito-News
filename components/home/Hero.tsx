@@ -16,7 +16,7 @@ export const Hero = () => {
 
       {/* Main Heading */}
       <div className="space-y-4">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
+        <h1 className="text-4xl text-white  md:text-6xl font-extrabold tracking-tight text-foreground">
           Level up your{' '}
           <span className="text-indigo-500">knowledge skills</span>
         </h1>
@@ -67,7 +67,7 @@ export const Hero = () => {
           </div>
 
           <div className="flex items-center gap-2 text-sm md:text-base">
-            <span className="font-bold text-foreground">12,437</span>
+            <span className="text-white font-bold text-foreground">12,437</span>
             <span className="text-muted-foreground">subscribers</span>
           </div>
 
