@@ -10,7 +10,6 @@ export async function fetchNews(params: {
   pageSize?: number;
 }) {
   const supabase = await createSupabaseServerClient();
-
   let query = supabase.from('news').select('*', { count: 'exact' });
 
   if (params.category && params.category !== 'all') {
@@ -21,17 +20,25 @@ export async function fetchNews(params: {
   }
 
   const { data: dbNews } = await query;
-  console.log('DB News Count:', dbNews?.length);
+
   const formattedDbNews = (dbNews || []).map((item) => ({
+    ...item,
     id: String(item.id),
+    image_url: item.image_url,
+    publishedAt: item.created_at || new Date().toISOString(),
+  }));
+
+  const formattedStaticNews = NEWS_DATA.map((item) => ({
+    id: item.id,
     title: item.title,
     excerpt: item.excerpt,
     category: item.category,
-    publishedAt: item.created_at || new Date().toISOString(),
-    imageUrl: item.image_url,
+    image_url: item.imageUrl,
+    publishedAt: item.publishedAt,
+    content: `<p>${item.excerpt}</p>`,
   }));
 
-  let allNews = [...formattedDbNews, ...NEWS_DATA];
+  let allNews = [...formattedDbNews, ...formattedStaticNews];
 
   if (params.category && params.category !== 'all') {
     allNews = allNews.filter(
@@ -55,8 +62,8 @@ export async function fetchNews(params: {
   const items = allNews.slice((page - 1) * pageSize, page * pageSize);
 
   return {
-    items,
-    total,
+    items: allNews.slice((page - 1) * pageSize, page * pageSize),
+    total: allNews.length,
     page,
     pageSize,
     totalPages,

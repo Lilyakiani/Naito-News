@@ -45,6 +45,7 @@ import { NEWS_DATA, NewsItem } from '@/lib/news-data';
 import { useRouter } from 'next/navigation';
 import { deleteNewsAction } from '@/lib/supabase/actions';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 export function NewsTable({ onEdit }: { onEdit: (id: string) => void }) {
   const [data, setData] = React.useState<NewsItem[]>([]);
@@ -60,13 +61,13 @@ export function NewsTable({ onEdit }: { onEdit: (id: string) => void }) {
   const router = useRouter();
 
   const handleDelete = async (id: string) => {
-    if (confirm('آیا از حذف این خبر اطمینان دارید؟')) {
+    if (confirm('U wanna Delete it?')) {
       const result = await deleteNewsAction(id);
       if (result.success) {
         setData((prev) => prev.filter((item) => item.id !== id));
-        toast.success('خبر با موفقیت حذف شد');
+        toast.success('Deleted!');
       } else {
-        toast.error('خطا: ' + result.message);
+        toast.error('Error :' + result.message);
       }
     }
   };
@@ -119,12 +120,15 @@ export function NewsTable({ onEdit }: { onEdit: (id: string) => void }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => onEdit(news.id)}
-                disabled={isStatic}
-              >
+
+              <Link href={`/news/${news.id}`}>
+                <DropdownMenuItem>View Post</DropdownMenuItem>
+              </Link>
+
+              <DropdownMenuItem onClick={() => onEdit?.(news.id.toString())}>
                 Edit News
               </DropdownMenuItem>
+
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="text-red-600"
