@@ -8,7 +8,6 @@ import {
   Siren,
   Drama,
   Handshake,
-  LayoutGrid,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
@@ -40,7 +39,7 @@ import {
 
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 import { ModeToggle } from '../theme/themetoggle';
-import { categories } from '@/lib/categories';
+import { NavbarSearch } from '@/components/Navbar/navbar-search';
 
 /* ---------------- types ---------------- */
 
@@ -53,14 +52,7 @@ interface MenuItem {
 }
 
 /* ---------------- component ---------------- */
-const iconMap: Record<string, React.ReactNode> = {
-  all: <LayoutGrid className="size-5 shrink-0" />,
-  business: <Handshake className="size-5 shrink-0" />,
-  politics: <Siren className="size-5 shrink-0" />,
-  sports: <Trophy className="size-5 shrink-0" />,
-  technology: <Cpu className="size-5 shrink-0" />,
-  entertainment: <Drama className="size-5 shrink-0" />,
-};
+
 const Navbar = ({
   menu = [
     { title: 'Home', url: '/' },
@@ -126,7 +118,7 @@ const Navbar = ({
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [supabase]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -160,7 +152,11 @@ const Navbar = ({
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-3">
+              {/* ✅ Search in Navbar */}
+              <NavbarSearch />
+
               <ModeToggle />
+
               {!user ? (
                 <Button asChild size="sm" className="h-9 font-semibold">
                   <Link href="/login">Login</Link>
@@ -187,6 +183,7 @@ const Navbar = ({
               )}
             </div>
           </nav>
+
           {/* ================= Mobile ================= */}
           <div className="flex h-16 items-center justify-between lg:hidden">
             <Link href="/" className="flex items-center gap-2 group">
@@ -209,6 +206,9 @@ const Navbar = ({
                 </SheetHeader>
 
                 <div className="flex flex-col gap-6 p-4">
+                  {/* ✅ Search in Mobile Drawer */}
+                  <NavbarSearch className="w-full" />
+
                   <Accordion type="single" collapsible>
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
@@ -254,7 +254,7 @@ const renderMenuItem = (item: MenuItem) => {
           {item.title}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul className="grid w-100 gap-3 p-4 md:w-125 md:grid-cols-2 lg:w-150 border border-neutral-800/50 bg-background/60 backdrop-blur-xl rounded-md shadow-2xl">
+          <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] border border-neutral-800/50 bg-background/60 backdrop-blur-xl rounded-md shadow-2xl">
             {item.items.map((sub) => (
               <NavigationMenuLink asChild key={sub.title}>
                 <li>
@@ -301,9 +301,8 @@ const renderMobileMenuItem = (item: MenuItem) => {
 };
 
 const SubMenuLink = ({ item }: { item: MenuItem }) => (
-  <a
+  <Link
     href={item.url}
-    // تغییر: حذف hover:bg-muted و استفاده از یک استایل ظریف‌تر
     className="flex flex-col gap-1 rounded-md p-3 transition-colors hover:bg-white/5 group"
   >
     <div className="flex items-center gap-2">
@@ -315,6 +314,7 @@ const SubMenuLink = ({ item }: { item: MenuItem }) => (
         {item.description}
       </p>
     )}
-  </a>
+  </Link>
 );
+
 export { Navbar };
