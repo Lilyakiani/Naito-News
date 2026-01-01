@@ -16,11 +16,11 @@ export const Hero = () => {
 
       {/* Main Heading */}
       <div className="space-y-4">
-        <h1 className="text-4xl text-white  md:text-6xl font-extrabold tracking-tight text-foreground">
+        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-foreground">
           Level up your{' '}
           <span className="text-indigo-500">knowledge skills</span>
         </h1>
-        <p className="max-w-150 mx-auto text-lg md:text-xl text-muted-foreground">
+        <p className="max-w-[600px] mx-auto text-lg md:text-xl text-muted-foreground">
           Join 12,000+ readers getting weekly tips on building better products.
           No spam, unsubscribe anytime.
         </p>
@@ -67,7 +67,7 @@ export const Hero = () => {
           </div>
 
           <div className="flex items-center gap-2 text-sm md:text-base">
-            <span className="text-white font-bold text-foreground">12,437</span>
+            <span className="font-bold text-foreground">12,437</span>
             <span className="text-muted-foreground">subscribers</span>
           </div>
 
