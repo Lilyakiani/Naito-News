@@ -85,12 +85,33 @@ export const HomePage = () => {
       </section>
 
       <section className="mb-8">
-        {isLoading && <p>Loading...</p>}
+        
+        {isLoading && (
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+       {Array.from({ length: 6 }).map((_, i) => (
+       <div key={i} className="rounded-xl border overflow-hidden">
+        <div className="h-40 bg-muted animate-pulse" />
+        <div className="p-4 space-y-3">
+          <div className="h-5 w-24 bg-muted rounded animate-pulse" />
+          <div className="h-6 w-3/4 bg-muted rounded animate-pulse" />
+          <div className="h-4 w-full bg-muted rounded animate-pulse" />
+          <div className="h-4 w-2/3 bg-muted rounded animate-pulse" />
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
         {isError && <p>Error loading news</p>}
 
-        {!isLoading && !isError && items.length === 0 && (
-          <p className="text-sm text-muted-foreground">No results found.</p>
-        )}
+       {!isLoading && items.length > 0 && (
+  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {items.map((item) => (
+      <NewsCard key={item.id} item={item} />
+    ))}
+  </div>
+)}
+
 
         {items.length > 0 && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
