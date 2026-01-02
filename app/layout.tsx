@@ -5,6 +5,8 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { ReactQueryProvider } from '@/components/providers/react-query-provider';
 import './globals.css';
 import NavbarWrapper from '@/components/Navbar/NavbarWrapper';
+import { Footer } from "@/components/Footer/site-footer";
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -41,6 +43,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <NavbarWrapper />
             <main className="flex-1">{children}</main>
+            <Footer />
           </ReactQueryProvider>
         </ThemeProvider>
       </body>
