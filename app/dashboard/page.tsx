@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/ui/app-sidebar';
 import { DynamicBreadcrump } from '@/components/Breadcrump';
-import { News } from '../news/page';
+import News from '../news/page';
 import CreateNews from '../create/page';
 
 export default function DashboardPage() {
