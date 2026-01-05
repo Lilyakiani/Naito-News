@@ -10,8 +10,9 @@ import { fetchNews } from '@/lib/api';
 import { NewsCard } from '@/components/home/news-card';
 import type { NewsResponse } from '@/lib/types';
 import { NewsCardSkeleton } from '@/components/home/news-card-skeleton';
+import { Suspense } from 'react';
 
-export default function HomePage() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -115,5 +116,15 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense
+      fallback={<div className="text-center py-20">Loading page...</div>}
+    >
+      <HomeContent />
+    </Suspense>
   );
 }
