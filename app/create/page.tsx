@@ -23,7 +23,7 @@ import { saveNewsAction } from '@/lib/supabase/actions';
 import { useEffect, useState } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 
-export const CreateNews = ({ newsId }: { newsId?: string | number | null }) => {
+const CreateNews = ({ newsId }: { newsId?: string | number | null }) => {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
   const [status, setStatus] = useState('draft');
@@ -409,3 +409,4 @@ export const CreateNews = ({ newsId }: { newsId?: string | number | null }) => {
     </form>
   );
 };
+export default CreateNews;
