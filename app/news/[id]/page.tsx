@@ -1,8 +1,8 @@
 import { createSupabaseServerClient } from '@/lib/supabase/server-client';
 import { notFound } from 'next/navigation';
 import { fetchNews } from '@/lib/api';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'; // فرض بر نصب بودن shadcn avatar
-import { Separator } from '@/components/ui/separator'; // فرض بر نصب بودن shadcn separator
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Separator } from '@/components/ui/separator';
 
 export default async function NewsDetails({
   params,

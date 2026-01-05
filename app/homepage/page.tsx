@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchNews } from '@/lib/api';
 import { NewsCard } from '@/components/home/news-card';
 import type { NewsResponse } from '@/lib/types';
+import { NewsCardSkeleton } from '@/components/home/news-card-skeleton';
 
 export const HomePage = () => {
   const searchParams = useSearchParams();
@@ -69,22 +70,27 @@ export const HomePage = () => {
       </section>
 
       <section className="mb-8">
-        {isLoading && <p>Loading...</p>}
-        {isError && <p>Error loading news</p>}
+        {isError && <p className="text-red-500">Error loading news</p>}
 
-        {data && data.items?.length === 0 && (
-          <p className="text-sm text-muted-foreground">No results found.</p>
-        )}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <NewsCardSkeleton key={i} />
+            ))
+          ) : (
+            <>
+              {data?.items?.map((item) => (
+                <NewsCard key={item.id} item={item} />
+              ))}
 
-        {data?.items?.length ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {data.items.map((item) => (
-              <NewsCard key={item.id} item={item} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">No results found.</p>
-        )}
+              {data && data.items?.length === 0 && (
+                <p className="col-span-full text-center text-sm text-muted-foreground py-10">
+                  No results found.
+                </p>
+              )}
+            </>
+          )}
+        </div>
       </section>
 
       <section className="mt-8">

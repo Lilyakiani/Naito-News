@@ -53,6 +53,7 @@ export const Header = () => {
       {/* logos*/}
       <div
         style={{
+          color: 'white',
           position: 'absolute',
           bottom: '20px',
           left: '0',
