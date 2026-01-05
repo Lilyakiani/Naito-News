@@ -1,8 +1,8 @@
 'use client';
 import NewsLetter from '@/components/NewsLetter';
-import { HomePage } from './homepage/page';
 import { Suspense } from 'react';
 import { Header } from '@/components/Header';
+import HomePage from './homepage/page';
 
 export default function Home() {
   return (

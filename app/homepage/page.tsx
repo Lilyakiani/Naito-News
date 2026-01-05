@@ -11,7 +11,7 @@ import { NewsCard } from '@/components/home/news-card';
 import type { NewsResponse } from '@/lib/types';
 import { NewsCardSkeleton } from '@/components/home/news-card-skeleton';
 
-export const HomePage = () => {
+export default function HomePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -59,6 +59,7 @@ export const HomePage = () => {
 
     router.replace(nextUrl);
   }, [debouncedSearch, categoryValue, pathname, router, searchParamsString]);
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <section className="mb-8">
@@ -115,4 +116,4 @@ export const HomePage = () => {
       </section>
     </div>
   );
-};
+}
